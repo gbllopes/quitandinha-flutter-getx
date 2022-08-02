@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
 import 'package:quitanda_virtual/src/models/cart_item_model.dart';
-import 'package:quitanda_virtual/src/servives/utils_services.dart';
+import 'package:quitanda_virtual/src/services/utils_services.dart';
 import 'package:quitanda_virtual/src/config/app_data.dart' as app_data;
 
 import 'components/cart_tile.dart';
