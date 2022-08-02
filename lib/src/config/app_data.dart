@@ -1,3 +1,6 @@
+import 'package:quitanda_virtual/src/models/user_model.dart';
+
+import '../models/cart_item_model.dart';
 import '../models/item_model.dart';
 
 ItemModel apple = ItemModel(
@@ -72,3 +75,16 @@ List<String> categories = [
   'Temperos',
   'Cereais',
 ];
+
+List<CartItemModel> cartItems = [
+  CartItemModel(item: apple, quantity: 2),
+  CartItemModel(item: mango, quantity: 1),
+  CartItemModel(item: guava, quantity: 3)
+];
+
+UserModel user = UserModel(
+    name: 'Gabriel Lopes',
+    email: 'flutter_developer@gmail.com',
+    phone: '99 9 9999-9999',
+    cpf: '999.999.999-99',
+    password: '');

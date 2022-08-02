@@ -6,12 +6,14 @@ class QuantityWidget extends StatefulWidget {
   int quantity;
   String unit;
   Function(int quantity) result;
+  bool isRemovable;
 
   QuantityWidget({
     Key? key,
     this.quantity = 1,
     required this.unit,
     required this.result,
+    this.isRemovable = false,
   }) : super(key: key);
 
   @override
@@ -34,13 +36,18 @@ class _QuantityWidgetState extends State<QuantityWidget> {
             )
           ]),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _QuantityButton(
-            icon: Icons.remove,
-            color: Colors.grey,
+            icon: !widget.isRemovable || widget.quantity > 1
+                ? Icons.remove
+                : Icons.delete_forever,
+            color: !widget.isRemovable || widget.quantity > 1
+                ? Colors.grey
+                : Colors.red,
             onPressed: () {
               setState(() {
-                if (widget.quantity > 1) {
+                if (widget.quantity > 1 || widget.isRemovable) {
                   widget.quantity--;
                   widget.result(widget.quantity);
                 }
@@ -58,6 +65,7 @@ class _QuantityWidgetState extends State<QuantityWidget> {
             onPressed: () {
               setState(() {
                 widget.quantity++;
+                widget.result(widget.quantity);
               });
             },
           ),
