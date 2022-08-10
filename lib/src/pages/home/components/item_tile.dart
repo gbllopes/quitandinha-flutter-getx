@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:quitanda_virtual/src/pages/products/product_screen.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
 
@@ -9,9 +10,13 @@ class ItemTile extends StatelessWidget {
   final ItemModel item;
   final UtilsServices utilsServices = UtilsServices();
 
+  final void Function(GlobalKey) cartAnimationMethod;
+  final GlobalKey imageGk = GlobalKey();
+
   ItemTile({
     Key? key,
     required this.item,
+    required this.cartAnimationMethod,
   }) : super(key: key);
 
   @override
@@ -36,7 +41,10 @@ class ItemTile extends StatelessWidget {
                   Expanded(
                       child: Hero(
                     tag: item.imgUrl,
-                    child: Image.asset(item.imgUrl),
+                    child: Image.asset(
+                      item.imgUrl,
+                      key: imageGk,
+                    ),
                   )),
                   Text(item.itemName,
                       style: const TextStyle(
@@ -63,22 +71,28 @@ class ItemTile extends StatelessWidget {
         Positioned(
           top: 4,
           right: 4,
-          child: GestureDetector(
-            onTap: () {},
-            child: Container(
-              height: 45,
-              width: 35,
-              decoration: BoxDecoration(
-                color: CustomColors.customSwatchColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(15),
-                  topRight: Radius.circular(20),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              topRight: Radius.circular(20),
+            ),
+            child: Material(
+              child: InkWell(
+                onTap: () {
+                  cartAnimationMethod(imageGk);
+                },
+                child: Ink(
+                  height: 45,
+                  width: 35,
+                  decoration: BoxDecoration(
+                    color: CustomColors.customSwatchColor,
+                  ),
+                  child: const Icon(
+                    Icons.add_shopping_cart_outlined,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
-              ),
-              child: const Icon(
-                Icons.add_shopping_cart_outlined,
-                color: Colors.white,
-                size: 20,
               ),
             ),
           ),
