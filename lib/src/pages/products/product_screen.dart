@@ -112,7 +112,7 @@ class ProductScreen extends StatelessWidget {
             top: 10,
             child: SafeArea(
               child: IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
+                  icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
                     Navigator.of(context).pop();
                   }),
