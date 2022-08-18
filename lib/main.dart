@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quitanda_virtual/src/pages/auth/controller/auth_controller.dart';
 
 import 'src/pages_routes/app_pages.dart';
 
 void main() {
+  Get.put(AuthController());
+
   runApp(const MyApp());
 }
 

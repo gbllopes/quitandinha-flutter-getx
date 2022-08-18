@@ -6,11 +6,15 @@ import 'package:quitanda_virtual/src/pages/common_widgets/app_name_widget.dart';
 import 'package:quitanda_virtual/src/pages_routes/app_pages.dart';
 
 import '../common_widgets/custom_text_field.dart';
+import 'controller/auth_controller.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
+
+  final emailController = TextEditingController(text: 'gabriellopes@gmail.com');
+  final passwordController = TextEditingController(text: '123456789');
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +73,7 @@ class SignInScreen extends StatelessWidget {
                     children: [
                       //Email
                       CustomTextField(
+                        controller: emailController,
                         label: 'Email',
                         icon: Icons.email,
                         validator: (email) {
@@ -81,6 +86,7 @@ class SignInScreen extends StatelessWidget {
                       ),
                       //Senha
                       CustomTextField(
+                        controller: passwordController,
                         label: 'Senha',
                         icon: Icons.lock,
                         isPassword: true,
@@ -97,21 +103,33 @@ class SignInScreen extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              Get.offNamed(PagesRoutes.baseRoute);
-                            }
+                        child: GetX<AuthController>(
+                          builder: (authController) {
+                            return ElevatedButton(
+                              onPressed: !authController.isLoading.value
+                                  ? () {
+                                      FocusScope.of(context).unfocus();
+                                      if (_formKey.currentState!.validate()) {
+                                        authController.signIn(
+                                            email: emailController.text,
+                                            password: passwordController.text);
+                                        // Get.offNamed(PagesRoutes.baseRoute);
+                                      }
+                                    }
+                                  : null,
+                              child: authController.isLoading.value
+                                  ? const CircularProgressIndicator()
+                                  : const Text(
+                                      'Entrar',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18),
+                                ),
+                              ),
+                            );
                           },
-                          child: const Text(
-                            'Entrar',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
                         ),
                       ),
                       Align(
