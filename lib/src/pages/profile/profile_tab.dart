@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:quitanda_virtual/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda_virtual/src/pages/common_widgets/custom_text_field.dart';
 import 'package:quitanda_virtual/src/config/app_data.dart' as app_data;
 
@@ -10,15 +12,22 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
+  final authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil do usuário'),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.logout))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                authController.signOut();
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.fromLTRB(16, 32, 16, 16),
         children: [
           CustomTextField(
@@ -81,8 +90,8 @@ class _ProfileTabState extends State<ProfileTab> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
                           child: Text('Atualização de senha',
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -127,7 +136,7 @@ class _ProfileTabState extends State<ProfileTab> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                     ),
                   )
                 ],

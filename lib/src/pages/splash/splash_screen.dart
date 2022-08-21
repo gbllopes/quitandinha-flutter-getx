@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
+import 'package:quitanda_virtual/src/pages/auth/controller/auth_controller.dart';
 import 'package:quitanda_virtual/src/pages/common_widgets/app_name_widget.dart';
-import 'package:quitanda_virtual/src/pages_routes/app_pages.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,9 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
-      Get.offNamed(PagesRoutes.signInRoute);
-    });
+    Get.find<AuthController>().validateToken();
   }
 
   @override
