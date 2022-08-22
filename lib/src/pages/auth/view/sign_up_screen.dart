@@ -110,21 +110,24 @@ class SignUpScreen extends StatelessWidget {
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(18))),
-                                    onPressed: !authController.isLoading.value
+                                    onPressed: !authController
+                                            .isCategoryLoading.value
                                         ? () {
                                             if (_globalKey.currentState!
                                                 .validate()) {
                                               _globalKey.currentState!.save();
                                               authController.signUp();
                                             }
+                                            FocusScope.of(context).unfocus();
                                           }
                                         : null,
-                                    child: !authController.isLoading.value
-                                        ? const Text(
-                                            'Cadastrar usuário',
-                                            style: TextStyle(fontSize: 18),
-                                          )
-                                        : const CircularProgressIndicator(),
+                                    child:
+                                        !authController.isCategoryLoading.value
+                                            ? const Text(
+                                                'Cadastrar usuário',
+                                                style: TextStyle(fontSize: 18),
+                                              )
+                                            : const CircularProgressIndicator(),
                                   ),
                                 ))
                           ],

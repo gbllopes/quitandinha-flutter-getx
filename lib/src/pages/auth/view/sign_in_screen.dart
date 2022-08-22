@@ -2,8 +2,10 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
+import 'package:quitanda_virtual/src/pages/auth/view/components/forgot_password_dialog.dart';
 import 'package:quitanda_virtual/src/pages/common_widgets/app_name_widget.dart';
 import 'package:quitanda_virtual/src/pages_routes/app_pages.dart';
+import 'package:quitanda_virtual/src/services/utils_services.dart';
 
 import '../../../services/validators.dart';
 import '../../common_widgets/custom_text_field.dart';
@@ -15,8 +17,11 @@ class SignInScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   final emailController =
-      TextEditingController(text: 'gblsilvalopes@gmail.com');
-  final passwordController = TextEditingController(text: 'admin');
+      TextEditingController(text: 'quitandavirtualgbl@gmail.com');
+
+  final passwordController = TextEditingController(text: 'Admin123456@');
+
+  final UtilsServices utilsServices = UtilsServices();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +98,7 @@ class SignInScreen extends StatelessWidget {
                         child: GetX<AuthController>(
                           builder: (authController) {
                             return ElevatedButton(
-                              onPressed: !authController.isLoading.value
+                              onPressed: !authController.isCategoryLoading.value
                                   ? () {
                                       FocusScope.of(context).unfocus();
                                       if (_formKey.currentState!.validate()) {
@@ -103,7 +108,7 @@ class SignInScreen extends StatelessWidget {
                                       }
                                     }
                                   : null,
-                              child: authController.isLoading.value
+                              child: authController.isCategoryLoading.value
                                   ? const CircularProgressIndicator()
                                   : const Text(
                                       'Entrar',
@@ -121,7 +126,20 @@ class SignInScreen extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              final bool? result = await showDialog(
+                                context: context,
+                                builder: (_) => ForgotPasswordDialog(
+                                    email: emailController.text),
+                              );
+
+                              if (result ?? false) {
+                                utilsServices.showToast(
+                                  message:
+                                      'Um link de recuperação foi enviado para seu email.',
+                                );
+                              }
+                            },
                             child: Text(
                               'Esqueceu a senha?',
                               style: TextStyle(

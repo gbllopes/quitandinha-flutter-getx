@@ -10,7 +10,7 @@ class ItemTile extends StatefulWidget {
   final ItemModel item;
   final void Function(GlobalKey) cartAnimationMethod;
 
-  ItemTile({
+  const ItemTile({
     Key? key,
     required this.item,
     required this.cartAnimationMethod,
@@ -53,7 +53,7 @@ class _ItemTileState extends State<ItemTile> {
                   Expanded(
                       child: Hero(
                     tag: widget.item.imgUrl,
-                    child: Image.asset(
+                    child: Image.network(
                       widget.item.imgUrl,
                       key: imageGk,
                     ),

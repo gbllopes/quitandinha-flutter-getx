@@ -1,6 +1,8 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import 'package:quitanda_virtual/src/pages/base/base_screen.dart';
+import 'package:quitanda_virtual/src/pages/base/biding/navigation_binding.dart';
+import 'package:quitanda_virtual/src/pages/home/binding/home_binding.dart';
 import 'package:quitanda_virtual/src/pages/splash/splash_screen.dart';
 
 import '../pages/auth/view/sign_in_screen.dart';
@@ -21,9 +23,12 @@ abstract class AppPages {
       name: PagesRoutes.signUpRoute,
     ),
     GetPage(
-      page: () => const BaseScreen(),
-      name: PagesRoutes.baseRoute,
-    ),
+        page: () => const BaseScreen(),
+        name: PagesRoutes.baseRoute,
+        bindings: [
+          NavigationBinding(),
+          HomeBinding(),
+        ]),
   ];
 }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
+import 'package:quitanda_virtual/src/pages/base/controller/navigation_controller.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
 
 import '../../models/item_model.dart';
@@ -8,6 +10,7 @@ import '../common_widgets/quantity_widget.dart';
 class ProductScreen extends StatelessWidget {
   ItemModel item;
   final UtilsServices utilsServices = UtilsServices();
+  final nagivationController = Get.find<NavigationController>();
   int cartItemQuantity = 1;
 
   ProductScreen({
@@ -26,7 +29,10 @@ class ProductScreen extends StatelessWidget {
               Expanded(
                 child: Hero(
                   tag: item.imgUrl,
-                  child: Image.asset(item.imgUrl),
+                  child: Image.network(
+                    item.imgUrl,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Expanded(
@@ -88,7 +94,11 @@ class ProductScreen extends StatelessWidget {
                             Icons.shopping_cart_outlined,
                             color: Colors.white,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.back();
+                            nagivationController
+                                .navigatePageView(NavigationTabs.cart);
+                          },
                           label: const Text('Add ao carrinho',
                               style: TextStyle(
                                 fontSize: 18,

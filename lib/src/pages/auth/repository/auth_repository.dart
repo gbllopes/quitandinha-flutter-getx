@@ -18,6 +18,16 @@ class AuthRepository {
     }
   }
 
+  Future<void> resetPassword(String email) async {
+    await _httpManager.restRequest(
+      url: EndPoints.changePassword,
+      method: HttpMethods.post,
+      body: {
+        "email": email,
+      },
+    );
+  }
+
   Future<AuthResult> validateToken(String token) async {
     final result = await _httpManager.restRequest(
       url: EndPoints.validateToken,

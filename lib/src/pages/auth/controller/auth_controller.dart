@@ -8,7 +8,7 @@ import '../../../constants/storage_keys.dart';
 import '../../../pages_routes/app_pages.dart';
 
 class AuthController extends GetxController {
-  RxBool isLoading = false.obs;
+  RxBool isCategoryLoading = false.obs;
   final utilsServices = UtilsServices();
   final authRepository = AuthRepository();
 
@@ -21,9 +21,9 @@ class AuthController extends GetxController {
   }
 
   Future<void> signUp() async {
-    isLoading.value = true;
+    isCategoryLoading.value = true;
     AuthResult result = await authRepository.signUp(user);
-    isLoading.value = false;
+    isCategoryLoading.value = false;
     result.when(success: (user) {
       this.user = user;
       saveTokenAndProceedToBase();
@@ -33,6 +33,10 @@ class AuthController extends GetxController {
         isError: true,
       );
     });
+  }
+
+  Future<void> resetPassword(String email) async {
+    await authRepository.resetPassword(email);
   }
 
   Future<void> validateToken() async {
@@ -64,12 +68,12 @@ class AuthController extends GetxController {
   }
 
   Future<void> signIn({required String email, required String password}) async {
-    isLoading.value = true;
+    isCategoryLoading.value = true;
 
     AuthResult result =
         await authRepository.signIn(email: email, password: password);
 
-    isLoading.value = false;
+    isCategoryLoading.value = false;
 
     result.when(success: (user) {
       this.user = user;
