@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
-import 'package:quitanda_virtual/src/models/cart_item_model.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
 import 'package:quitanda_virtual/src/config/app_data.dart' as app_data;
 
-import '../common_widgets/payment_dialog.dart';
-import 'components/cart_tile.dart';
+import '../../common_widgets/payment_dialog.dart';
+import '../components/cart_tile.dart';
+import '../controller/cart_controller.dart';
 
 class CartTab extends StatefulWidget {
-  CartTab({Key? key}) : super(key: key);
+  const CartTab({Key? key}) : super(key: key);
 
   @override
   State<CartTab> createState() => _CartTabState();
@@ -17,48 +18,35 @@ class CartTab extends StatefulWidget {
 class _CartTabState extends State<CartTab> {
   final UtilsServices utilsServices = UtilsServices();
 
-  void removeItemFromCart(CartItemModel cartItem) {
-    setState(() {
-      app_data.cartItems.remove(cartItem);
-      utilsServices.showToast(
-          message:
-              'Produto \'${cartItem.item.itemName}\' removido(a) do carrinho');
-    });
-  }
-
-  double cartTotalPrice() {
-    double total = 0;
-    for (var item in app_data.cartItems) {
-      total += item.totalPrice();
-    }
-    return total;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Carrinho'),
+        title: const Text('Carrinho'),
       ),
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemCount: app_data.cartItems.length,
-              itemBuilder: (_, idx) => CartTile(
-                  cartItem: app_data.cartItems[idx],
-                  remove: removeItemFromCart),
+            child: GetBuilder<CartController>(
+              builder: (controller) {
+                return ListView.builder(
+                  itemCount: controller.cartItems.length,
+                  itemBuilder: (_, idx) => CartTile(
+                    cartItem: controller.cartItems[idx],
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 20),
           Container(
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(30),
                 ),
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(color: Colors.grey, blurRadius: 3, spreadRadius: 2)
                 ]),
             child: Column(
@@ -68,12 +56,17 @@ class _CartTabState extends State<CartTab> {
                   'Total geral',
                   style: TextStyle(fontSize: 12),
                 ),
-                Text(
-                  utilsServices.priceToCurrency(cartTotalPrice()),
-                  style: TextStyle(
-                      fontSize: 23,
-                      color: CustomColors.customSwatchColor,
-                      fontWeight: FontWeight.bold),
+                GetBuilder<CartController>(
+                  builder: (controller) {
+                    return Text(
+                      utilsServices
+                          .priceToCurrency(controller.cartTotalPrice()),
+                      style: TextStyle(
+                          fontSize: 23,
+                          color: CustomColors.customSwatchColor,
+                          fontWeight: FontWeight.bold),
+                    );
+                  },
                 ),
                 SizedBox(
                   height: 50,
