@@ -32,10 +32,10 @@ class OrderTile extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text('Pedido ${order.id}'),
-                Text(
-                  utilsServices.formatDateTime(order.createdDateTime),
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                ),
+                // Text(
+                //   utilsServices.formatDateTime(order.createdDateTime),
+                //   style: TextStyle(fontSize: 12, color: Colors.black),
+                // ),
               ],
             ),
             children: [
@@ -73,7 +73,7 @@ class OrderTile extends StatelessWidget {
                 TextSpan(
                   style: const TextStyle(fontSize: 20),
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: 'Total ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

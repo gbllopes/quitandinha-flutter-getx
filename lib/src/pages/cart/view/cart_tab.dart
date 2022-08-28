@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
-import 'package:quitanda_virtual/src/config/app_data.dart' as app_data;
 
-import '../../common_widgets/payment_dialog.dart';
 import '../components/cart_tile.dart';
 import '../controller/cart_controller.dart';
 
@@ -29,16 +27,28 @@ class _CartTabState extends State<CartTab> {
           Expanded(
             child: GetBuilder<CartController>(
               builder: (controller) {
-                return ListView.builder(
-                  itemCount: controller.cartItems.length,
-                  itemBuilder: (_, idx) => CartTile(
-                    cartItem: controller.cartItems[idx],
-                  ),
-                );
+                return Visibility(
+                    visible: controller.cartItems.isNotEmpty,
+                    replacement: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.remove_shopping_cart,
+                            size: 40,
+                            color: CustomColors.customSwatchColor,
+                          ),
+                          const Text('Não há itens no carrinho')
+                        ]),
+                    child: ListView.builder(
+                      itemCount: controller.cartItems.length,
+                      itemBuilder: (_, idx) => CartTile(
+                        cartItem: controller.cartItems[idx],
+                      ),
+                    ));
               },
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.all(16),
             decoration: const BoxDecoration(
@@ -70,30 +80,38 @@ class _CartTabState extends State<CartTab> {
                 ),
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
-                          ),
-                          primary: CustomColors.customSwatchColor),
-                      onPressed: () async {
-                        bool? result = await showOrderConfirmation();
-                        if (result ?? false) {
-                          showDialog(
-                            context: context,
-                            builder: (_) => PaymentDialog(
-                              order: app_data.orders.first,
-                            ),
-                          );
-                        } else {
-                          utilsServices.showToast(
-                              message: 'Pedido não confirmado', isError: true);
-                        }
-                      },
-                      child: const Text(
-                        'Concluir pedido',
-                        style: TextStyle(fontSize: 18),
-                      )),
+                  child: GetBuilder<CartController>(
+                    builder: (cartController) {
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              primary: CustomColors.customSwatchColor),
+                          onPressed: cartController.cartItems.isNotEmpty &&
+                                  !cartController.isCheckoutLoading
+                              ? () async {
+                                  bool? result = await showOrderConfirmation();
+                                  if (result ?? false) {
+                                    cartController.checkoutCart(
+                                      total: cartController.cartTotalPrice(),
+                                    );
+                                  } else {
+                                    utilsServices.showToast(
+                                        message: 'Pedido não confirmado');
+                                  }
+                                }
+                              : null,
+                          child: !cartController.isCheckoutLoading
+                              ? const Text(
+                                  'Concluir pedido',
+                                  style: TextStyle(fontSize: 18),
+                                )
+                              : CircularProgressIndicator(
+                                  color: CustomColors.customSwatchColor,
+                                ));
+                    },
+                  ),
                 )
               ],
             ),

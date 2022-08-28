@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
 import 'package:quitanda_virtual/src/models/cart_item_model.dart';
 import 'package:quitanda_virtual/src/pages/common_widgets/quantity_widget.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
+
+import '../controller/cart_controller.dart';
 
 class CartTile extends StatefulWidget {
   final CartItemModel cartItem;
@@ -19,12 +22,13 @@ class CartTile extends StatefulWidget {
 
 class _CartTileState extends State<CartTile> {
   final UtilsServices utilsServices = UtilsServices();
+  final controller = Get.find<CartController>();
 
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+      margin: const EdgeInsets.fromLTRB(10, 10, 10, 3),
       child: ListTile(
         leading: Image.network(
           widget.cartItem.item.imgUrl,
@@ -45,7 +49,12 @@ class _CartTileState extends State<CartTile> {
         trailing: QuantityWidget(
           unit: widget.cartItem.item.unit,
           quantity: widget.cartItem.quantity,
-          result: (int quantity) {},
+          result: (int quantity) {
+            controller.changeItemQuantity(
+              cart: widget.cartItem,
+              cartItemQuantity: quantity,
+            );
+          },
           isRemovable: true,
         ),
       ),

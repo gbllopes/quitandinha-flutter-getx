@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:quitanda_virtual/src/constants/storage_keys.dart';
 
 abstract class HttpMethods {
   static const String post = 'POST';
@@ -19,8 +20,8 @@ class HttpManager {
       ..addAll({
         'content-type': 'application/json',
         'accept': 'application/json',
-        'X-Parse-Application-Id': 'Ut1eFYpnvh4WmumBxiFAVvr7vABmBg5XqWvEp1K6',
-        'X-Parse-REST-API-Key': 'jnDUMpi2BYFntMVnnqtm0OogA9VU8hgxwPPgDkqV'
+        'X-Parse-Application-Id': StorageKeys.aplicationId,
+        'X-Parse-REST-API-Key': StorageKeys.aplicationRestApiKey
       });
     Dio dio = Dio();
 

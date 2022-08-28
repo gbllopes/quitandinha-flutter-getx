@@ -8,9 +8,14 @@ import 'package:quitanda_virtual/src/pages/splash/splash_screen.dart';
 
 import '../pages/auth/view/sign_in_screen.dart';
 import '../pages/auth/view/sign_up_screen.dart';
+import '../pages/products/product_screen.dart';
 
 abstract class AppPages {
   static final pages = <GetPage>[
+    GetPage(
+      page: () => const ProductScreen(),
+      name: PagesRoutes.productRoute,
+    ),
     GetPage(
       page: () => const SplashScreen(),
       name: PagesRoutes.splashRoute,
@@ -39,4 +44,5 @@ abstract class PagesRoutes {
   static const String signInRoute = '/sign-in';
   static const String splashRoute = '/splash';
   static const String signUpRoute = '/sign-up';
+  static const String productRoute = '/product';
 }

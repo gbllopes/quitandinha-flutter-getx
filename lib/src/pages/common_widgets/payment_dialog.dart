@@ -1,5 +1,5 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:quitanda_virtual/src/models/order_model.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
@@ -25,7 +25,7 @@ class PaymentDialog extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  const Text(
                     'Pagamento com pix',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -34,10 +34,10 @@ class PaymentDialog extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: QrImage(
-                      data: "1234567890",
-                      version: QrVersions.auto,
-                      size: 200.0,
+                    child: Image.memory(
+                      utilsServices.decodeQrCodeImage(order.qrCodeImage!),
+                      height: 200,
+                      width: 200,
                     ),
                   ),
                   Text(
@@ -58,8 +58,11 @@ class PaymentDialog extends StatelessWidget {
                           ),
                           side:
                               const BorderSide(width: 2, color: Colors.green)),
-                      onPressed: () {},
-                      icon: Icon(
+                      onPressed: () {
+                        FlutterClipboard.copy(order.copyAndPaste);
+                        utilsServices.showToast(message: "Código copiado");
+                      },
+                      icon: const Icon(
                         Icons.copy,
                         size: 15,
                       ),
@@ -77,7 +80,7 @@ class PaymentDialog extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               ),
             )
           ],

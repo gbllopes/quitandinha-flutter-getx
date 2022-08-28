@@ -2,21 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
 import 'package:quitanda_virtual/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda_virtual/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
 
 import '../../models/item_model.dart';
 import '../common_widgets/quantity_widget.dart';
 
-class ProductScreen extends StatelessWidget {
-  ItemModel item;
-  final UtilsServices utilsServices = UtilsServices();
-  final nagivationController = Get.find<NavigationController>();
-  int cartItemQuantity = 1;
-
-  ProductScreen({
+class ProductScreen extends StatefulWidget {
+  const ProductScreen({
     Key? key,
-    required this.item,
   }) : super(key: key);
+
+  @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+class _ProductScreenState extends State<ProductScreen> {
+  final cartController = Get.find<CartController>();
+
+  final ItemModel item = Get.arguments;
+
+  final UtilsServices utilsServices = UtilsServices();
+
+  final nagivationController = Get.find<NavigationController>();
+
+  int cartItemQuantity = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +104,9 @@ class ProductScreen extends StatelessWidget {
                             Icons.shopping_cart_outlined,
                             color: Colors.white,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            await cartController.addItemsToCart(
+                                item: item, quantity: cartItemQuantity);
                             Get.back();
                             nagivationController
                                 .navigatePageView(NavigationTabs.cart);

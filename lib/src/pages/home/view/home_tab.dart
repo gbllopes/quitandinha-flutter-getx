@@ -4,6 +4,8 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quitanda_virtual/src/config/custom_colors.dart';
+import 'package:quitanda_virtual/src/pages/base/controller/navigation_controller.dart';
+import 'package:quitanda_virtual/src/pages/cart/controller/cart_controller.dart';
 import 'package:quitanda_virtual/src/pages/common_widgets/custom_shimmer.dart';
 import 'package:quitanda_virtual/src/pages/home/controller/home_controller.dart';
 import 'package:quitanda_virtual/src/services/utils_services.dart';
@@ -22,8 +24,9 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   final _searchController = TextEditingController();
   final UtilsServices utilsServices = UtilsServices();
-  GlobalKey<CartIconKey> globalKeyCartItems = GlobalKey<CartIconKey>();
+  final navigationController = Get.find<NavigationController>();
 
+  GlobalKey<CartIconKey> globalKeyCartItems = GlobalKey<CartIconKey>();
   late Function(GlobalKey) runAddToCardAnimation;
 
   void itemSelectedCartAnimations(GlobalKey gkImage) {
@@ -42,16 +45,25 @@ class _HomeTabState extends State<HomeTab> {
           Padding(
             padding: const EdgeInsets.only(top: 15, right: 15),
             child: GestureDetector(
-              onTap: () {},
-              child: Badge(
-                  badgeContent: const Text('2',
-                      style: TextStyle(color: Colors.white, fontSize: 12)),
-                  badgeColor: CustomColors.customConstrastColor,
-                  child: AddToCartIcon(
-                    key: globalKeyCartItems,
-                    icon: Icon(Icons.shopping_cart,
-                        color: CustomColors.customSwatchColor),
-                  )),
+              onTap: () {
+                navigationController.navigatePageView(NavigationTabs.cart);
+              },
+              child: GetBuilder<CartController>(
+                builder: (cartController) {
+                  return Badge(
+                      badgeContent: Text(
+                        cartController.cartItems.length.toString(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                      badgeColor: CustomColors.customConstrastColor,
+                      child: AddToCartIcon(
+                        key: globalKeyCartItems,
+                        icon: Icon(Icons.shopping_cart,
+                            color: CustomColors.customSwatchColor),
+                      ));
+                },
+              ),
             ),
           )
         ],
